@@ -21,6 +21,7 @@ public class IndexedMinPQ<Key extends Comparable>{
 		qp[i] = size;
 		pq[size] = i;
 		size++;
+		swim(size-1);
 		
 	}
 	public boolean isEmpty(){
@@ -34,6 +35,8 @@ public class IndexedMinPQ<Key extends Comparable>{
 		swap(0,size-1);
 		size--;
 		sink(0);
+		qp[min] = -1;
+		keys[min] = null;
 		return min;
 	}
 	public void decreaseKey(int i,Key k){
@@ -48,8 +51,8 @@ public class IndexedMinPQ<Key extends Comparable>{
 		qp[pq[j]] = j;
 	}
 	private void swim(int k){
-		while(less(k,k/2) == true){
-			swap(k,k/2);
+		while(k > 0 && less(k,(k-1)/2) == true){
+			swap(k,(k-1)/2);
 		}
 	}
 	private boolean less(int i, int j){
@@ -61,8 +64,8 @@ public class IndexedMinPQ<Key extends Comparable>{
 			if(2*k + 1 < size && less(2*k+1,min)){
 				min = 2*k + 1;
 			}
-			if(2*k + 2 < size && less(2*k + 1, min)){
-				min = 2*k + 1;
+			if(2*k + 2 < size && less(2*k + 2, min)){
+				min = 2*k + 2;
 			}
 			if(min != k){
 				swap(min,k);
