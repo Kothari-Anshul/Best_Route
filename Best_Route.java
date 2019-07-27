@@ -11,7 +11,6 @@ public class Best_Route {
 	private int distTo[];
 	private Edge edgeTo[];
 	private IndexedMinPQ<Integer> pq;
-	private boolean marked[];
 	public Best_Route(int V,int l, int h,String stations[]){
 		// initialize the availability of each train to 0 or any suitable number
 		this.low_mark_no = l;
@@ -47,13 +46,11 @@ public class Best_Route {
 	public void shortest_path(int s, int d){
 		distTo = new int[V];
 		edgeTo = new Edge[V];
-		marked = new boolean[V];
 		// initialize the distTo array to start with;
 		for(int i=0; i<V;i++){
 			distTo[i] = Integer.MAX_VALUE;
 		}
 		distTo[s] = 0;
-		marked[s] = true;
 		pq = new IndexedMinPQ<Integer>(V);
 		pq.put(s,0);
 		while(pq.isEmpty() == false){
@@ -62,7 +59,7 @@ public class Best_Route {
 				relax(e);
 			}
 		}
-		if(marked[d] == false){
+		if(distTo[d] == Integer.MAX_VALUE){
 			System.out.println("Sorry you are so late, no trains form S->D, try GENERAL COACH! ");
 		}else{
 			System.out.println("Total time for your journey is " + String.valueOf(distTo[d]));
@@ -83,14 +80,10 @@ public class Best_Route {
 	public void relax(Edge e){
 		int v = e.from();
 		int w = e.to();
-		if(marked[w] == true){
-			return;
-		}
 		if(available.get(e.train_no()) != 0 && distTo[w] > distTo[v] + e.time()){
 			// update 
 			distTo[w] = distTo[v]  + e.time();
 			edgeTo[w] = e;
-			marked[w] = true;
 			if(pq.contains(w)){
 				pq.decreaseKey(w,distTo[w]);
 				
