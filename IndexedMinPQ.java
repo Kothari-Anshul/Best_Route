@@ -53,6 +53,7 @@ public class IndexedMinPQ<Key extends Comparable>{
 	private void swim(int k){
 		while(k > 0 && less(k,(k-1)/2) == true){
 			swap(k,(k-1)/2);
+			k = (k-1)/2;
 		}
 	}
 	private boolean less(int i, int j){
